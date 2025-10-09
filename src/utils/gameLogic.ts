@@ -1,4 +1,6 @@
-import { minimaxWithDepthLimit } from "./ai";
+import { minimaxWithDepthLimit, resetSteps } from "./ai";
+
+let thinkingTime = 0;
 
 export const calculateWinner = (squares: (string|null)[]) => {
   const lines = [
@@ -40,6 +42,10 @@ export const getRandomMove = (board: (string | null)[]) => {
 }
 
 export const getBestMove = (board: (string|null)[], maxDepth: number) => {
+  resetSteps();
+
+  const startTime = performance.now();
+
   let bestScore = -Infinity;
   let move = null;
 
@@ -54,7 +60,11 @@ export const getBestMove = (board: (string|null)[], maxDepth: number) => {
       }
     }
   }
-  return move
+  
+  const endTime = performance.now(); // end timing
+  thinkingTime = endTime - startTime; // milliseconds
+  
+  return move;
 }
 
 export const getAIMove = (
@@ -71,3 +81,5 @@ export const getAIMove = (
       return getBestMove(board, 9);
   }
 };
+
+export const getThinkingTime = () => Math.round(thinkingTime * 100) / 100;

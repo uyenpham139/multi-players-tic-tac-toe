@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Board from "./Board";
-import { calculateWinner, getAIMove } from "../utils/gameLogic";
-import { getSteps, resetSteps } from "../utils/ai";
+import { calculateWinner, getAIMove, getThinkingTime } from "../utils/gameLogic";
+import { getSteps } from "../utils/ai";
 
 interface GameInfoProps {
   mode: string,
+  showPerformance: boolean,
 }
 
-export default function GameInfo({ mode }: GameInfoProps) {
+export default function GameInfo({ mode, showPerformance }: GameInfoProps) {
   const [squares, setSquares] = useState<(string | null)[]>(Array(9).fill(null));
   const [playerNext, setPlayerNext] = useState<boolean>(true);
   const [scores, setScores] = useState({player: 0, ai: 0})
@@ -34,7 +35,6 @@ export default function GameInfo({ mode }: GameInfoProps) {
   useEffect(() => {
     setWinner(calculateWinner(squares));
     console.log("Steps: ", getSteps())
-    resetSteps();
   }, [squares]);
 
   useEffect(() => {
@@ -92,6 +92,13 @@ export default function GameInfo({ mode }: GameInfoProps) {
           </div>
           <div className="scoretext ai">AI</div>
         </div>
+        {showPerformance ? (
+          <div className="performanceBox">
+            <p className="performanceTitle">AI performance</p>
+            <p className="performanceText">Position evaluated: {getSteps()}</p>
+            <p className="performanceText">Thinking time: {getThinkingTime()}ms</p>
+          </div>
+        ) : ''}
         <Board squares={squares} handleClick={handleClick} />
         <div className="optionBtns">
           {winner ? (
