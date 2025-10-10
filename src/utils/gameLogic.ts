@@ -74,9 +74,9 @@ export const getAIMove = (
   switch (difficulty) {
     case "easy":
       return getRandomMove(board);
-    case "hard":
+    case "medium":
       return getBestMove(board, 4);
-    case "challenge":
+    case "hard":
     default:
       return getBestMove(board, 9);
   }

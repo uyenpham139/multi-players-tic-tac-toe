@@ -31,11 +31,11 @@ function App() {
   };
 
   const handleSwitchChange = () => {
-    if (mode === "hard" || mode === "challenge") {
+    if (mode === "medium" || mode === "hard") {
       setShowPerformance((prev) => !prev);
       setErrorMsg("");
     } else {
-      setErrorMsg("*Only Hard or Challenge mode can enable this.");
+      setErrorMsg("*Only Medium or Hard mode can enable this.");
     }
   };
 
@@ -70,8 +70,8 @@ function App() {
             {gameState === "menu" ? (
               <div className='buttons'>
                 <button className='modeBtns easy' value="easy" onClick={handleClick}>Easy Mode</button>
+                <button className='modeBtns medium' value="medium" onClick={handleClick}>Medium Mode</button>
                 <button className='modeBtns hard' value="hard" onClick={handleClick}>Hard Mode</button>
-                <button className='modeBtns challenge' value="challenge" onClick={handleClick}>Challenge Mode</button>
               </div>
             ) : (
               <>

@@ -281,13 +281,13 @@ h2 {
   color: var(--second-yellow-700);
 }
 
-.modeBtns.hard {
+.modeBtns.medium {
   background-color: var(--second-blue-100);
   box-shadow: 0px 6px 0 var(--second-blue-500);
   color: var(--second-blue-700);
 }
 
-.modeBtns.challenge {
+.modeBtns.hard {
   background-color: var(--second-pink-100);
   box-shadow: 0px 6px 0 var(--second-pink-500);
   color: var(--second-pink-700);
@@ -297,11 +297,11 @@ h2 {
   border-color: var(--second-yellow-700);
 }
 
-.modeBtns.hard:hover {
+.modeBtns.medium:hover {
   border-color: var(--second-blue-700);
 }
 
-.modeBtns.challenge:hover {
+.modeBtns.hard:hover {
   border-color: var(--second-pink-700);
 }
 
@@ -310,12 +310,12 @@ h2 {
   box-shadow: 0px 3px 0 var(--second-yellow-700);
 }
 
-.modeBtns.hard:active {
+.modeBtns.medium:active {
   transform: translateY(3px);
   box-shadow: 0px 3px 0 var(--second-blue-700);
 }
 
-.modeBtns.challenge:active {
+.modeBtns.hard:active {
   transform: translateY(3px);
   box-shadow: 0px 3px 0 var(--second-pink-700);
 }
