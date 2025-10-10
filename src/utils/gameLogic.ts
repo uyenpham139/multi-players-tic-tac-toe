@@ -53,7 +53,7 @@ export const getBestMove = (board: (string|null)[], maxDepth: number) => {
     if (!board[i]) {
       const newBoard = [...board];
       newBoard[i] = "O";
-      const score = minimaxWithDepthLimit(newBoard, 0, false, maxDepth);
+      const score = minimaxWithDepthLimit(newBoard, 0, false, -Infinity, Infinity, maxDepth);
       if (score > bestScore) { 
         bestScore = score;
         move = i;

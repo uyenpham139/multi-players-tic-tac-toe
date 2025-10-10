@@ -2,7 +2,7 @@ import { calculateWinner } from "./gameLogic"
 
 let steps = 0;
 
-export const minimaxWithDepthLimit = (board: (string|null)[], depth: number, isMaximizing: boolean, maxDepth: number) => {
+export const minimaxWithDepthLimit = (board: (string|null)[], depth: number, isMaximizing: boolean, alpha: number, beta: number, maxDepth: number) => {
   steps++;
   
   const winner = calculateWinner(board);
@@ -18,8 +18,10 @@ export const minimaxWithDepthLimit = (board: (string|null)[], depth: number, isM
       if (!board[i]) {
         const newBoard = [...board];
         newBoard[i] = "O";
-        const evalScore = minimaxWithDepthLimit(newBoard, depth + 1, false, maxDepth);
+        const evalScore = minimaxWithDepthLimit(newBoard, depth + 1, false, alpha, beta, maxDepth);
         maxEval = Math.max(maxEval, evalScore);
+        alpha = Math.max(alpha, evalScore);
+        if (beta <= alpha) break;
       }
     }
     return maxEval;
@@ -29,8 +31,10 @@ export const minimaxWithDepthLimit = (board: (string|null)[], depth: number, isM
       if (!board[i]) {
         const newBoard = [...board];
         newBoard[i] = "X";
-        const evalScore = minimaxWithDepthLimit(newBoard, depth + 1, true, maxDepth);
+        const evalScore = minimaxWithDepthLimit(newBoard, depth + 1, true, alpha, beta, maxDepth);
         minEval = Math.min(minEval, evalScore);
+        beta = Math.min(beta, evalScore);
+        if (beta <= alpha) break;
       }
     }
     return minEval;
