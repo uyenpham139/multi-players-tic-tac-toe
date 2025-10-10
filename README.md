@@ -24,7 +24,7 @@ Make sure you have installed:
 ## 2️⃣ Installation
 Clone the repository and install dependencies:
 ```bash
-git clone https://github.com/yourusername/tic-tac-toe-ai.git
+git clone https://github.com/uyenpham139/tic-tac-toe-minimax.git
 cd tic-tac-toe-ai
 npm install
 ```
@@ -48,12 +48,12 @@ http://localhost:5173/
 - Click on an empty cell to make your move.
 - The AI (or your opponent) will respond within 1 second.
 - The game ends when:
-  - One player aligns three symbols in a row, column, or diagonal.
-  - All cells are filled with no winner → draw.
-  - You can restart anytime using the Reset button.
-- When you or AI wins, the score will automatically update and you can continue to play without missing the score 
-- You can even choose other modes by clicking Home button
-- You can show the AI performance by choosing More button and toggling AI performance button when you are in medium or hard mode 
+  - A player aligns three symbols in a row, column, or diagonal.
+  - All cells are filled with no winner → it’s a draw.
+- When you or the AI wins, the score updates automatically, and you can keep playing without losing progress.
+- You can switch modes anytime using the Home button.
+- To track AI performance, click the More button and toggle AI Performance (available in Medium and Hard modes).
+- Use the Reset button to start a new game whenever you like.
 
 # 🧠 AI Difficulty Levels
 | Level  | Algorithm Used              | Description |
