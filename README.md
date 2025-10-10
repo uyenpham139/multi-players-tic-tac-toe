@@ -1,75 +1,94 @@
-# React + TypeScript + Vite
+# 🎮 Tic-Tac-Toe with Minimax and Alpha-Beta Pruning
+A browser-based Tic-Tac-Toe game where you can play against an AI powered by the Minimax algorithm with Alpha-Beta pruning optimization.
+This project demonstrates how classical AI techniques can be applied to simple games for strategic decision-making.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🧩 Features
+- Play Human vs AI or Human vs Human
+- AI with three difficulty levels:
+  - Easy – random moves
+  - Medium – limited-depth minimax (makes some mistakes)
+  - Hard – full minimax with alpha-beta pruning (plays optimally)
+- Dynamic UI built with React
+- Score tracking for both player and AI
+- Step counter to track move count
+- Win, loss, and draw detection
+- Mode switching without resetting the score
+- AI performance display toggle for analysis in Medium and Hard modes
 
-Currently, two official plugins are available:
+# ⚙️ Setup Instructions
+## 1️⃣ Prerequisites
+Make sure you have installed:
+- Node.js (v16 or later)
+- npm or yarn
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 2️⃣ Installation
+Clone the repository and install dependencies:
+```bash
+git clone https://github.com/yourusername/tic-tac-toe-ai.git
+cd tic-tac-toe-ai
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 3️⃣ Run the project
+Start the development server:
+```bash
+npm start
 ```
+or
+```bash
+npm run dev
+```
+Then open your browser and visit:
+```bash
+http://localhost:5173/
+```
+
+# 🕹️ How to Play
+- Choose your game mode and AI difficulty.
+- Click on an empty cell to make your move.
+- The AI (or your opponent) will respond within 1 second.
+- The game ends when:
+  - One player aligns three symbols in a row, column, or diagonal.
+  - All cells are filled with no winner → draw.
+  - You can restart anytime using the Reset button.
+- When you or AI wins, the score will automatically update and you can continue to play without missing the score 
+- You can even choose other modes by clicking Home button
+- You can show the AI performance by choosing More button and toggling AI performance button when you are in medium or hard mode 
+
+# 🧠 AI Difficulty Levels
+| Level  | Algorithm Used              | Description |
+|--------|-----------------------------|--------------|
+| **Easy**   | Random Move                 | AI picks a random empty square. No strategy. |
+| **Medium** | Minimax + Alpha-Beta Pruning (Depth-Limited)| AI looks a few moves ahead, can make mistakes. |
+| **Hard**   | Minimax + Alpha-Beta Pruning | AI explores all possible moves optimally with pruning for performance. |
+
+# ⚡ Explanation
+The Minimax algorithm evaluates all possible moves recursively to choose the one with the best guaranteed outcome:
+- Maximizing player (O) tries to maximize the score.
+- Minimizing player (X) tries to minimize it.
+To improve efficiency, Alpha-Beta pruning skips branches that can’t affect the final decision — reducing computation time without changing the result.
+
+# 🧩 Code Structure
+```bash
+src/
+├── components/
+│   ├── Board.tsx
+│   ├── Square.tsx
+│   └── GameInfo.tsx
+├── utils/
+│   ├── gameLogic.ts
+│   └── minimax.ts
+├── App.tsx
+└── index.tsx
+```
+- `gameLogic.ts` – Handles winner detection and basic board utilities.
+- `minimax.ts` – Contains the minimax and alpha-beta pruning algorithms with detailed comments.
+- `GameInfo.tsx` – Manages the game state and AI moves.
+
+# 💻 Technologies Used
+- React + TypeScript
+- Functional components and hooks (useState, useEffect)
+
+# 📜 License
+
+This project is licensed under the MIT License
