@@ -9,7 +9,7 @@ interface PlayerAssignedMessage {
 interface UpdateMessage {
   type: "UPDATE";
   square: number;
-  value: number;
+  amount: number; // ✅ changed from 'value' to 'amount'
 }
 
 interface GameOverMessage {
@@ -35,15 +35,16 @@ export function handleServerMessage(
       break;
 
     case "UPDATE":
+      // Apply delta operation
       setBoard((prevBoard) => {
         const newBoard = [...prevBoard];
-        newBoard[msg.square] = msg.value;
+        newBoard[msg.square] += msg.amount; // increment/decrement relative
         return newBoard;
       });
       break;
 
     case "GAME_OVER":
-      alert(`Game Over! Winner: ${msg.winner}`);
+      // alert(`Game Over! Winner: ${msg.winner}`);
       break;
 
     default:

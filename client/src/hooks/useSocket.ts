@@ -1,4 +1,3 @@
-// /src/hooks/useSocket.ts
 import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { handleServerMessage, type ServerMessage } from "../utils/helpers";
@@ -9,7 +8,7 @@ export function useSocket(roomId: string) {
   const [player, setPlayer] = useState<"ODD" | "EVEN" | "SPECTATOR" | null>(null);
   const [board, setBoard] = useState<number[]>(Array(25).fill(0));
 
-  // Initialize socket
+  // Initialize socket connection
   useEffect(() => {
     const socketInstance = io("http://localhost:3000");
 
@@ -20,7 +19,7 @@ export function useSocket(roomId: string) {
 
     socketInstance.on("disconnect", () => setConnected(false));
 
-    // Handle messages from the server
+    // Handle messages from server
     socketInstance.on("message", (msg: ServerMessage) => {
       handleServerMessage(msg, setPlayer, setBoard);
     });
@@ -33,14 +32,19 @@ export function useSocket(roomId: string) {
     };
   }, [roomId]);
 
-  // Function to send increment
+  // Function to send increment operation
   const sendIncrement = useCallback(
-    (squareIndex: number) => {
+    (squareIndex: number, amount: number = 1) => {
       if (socket && connected) {
-        socket.emit("message", { type: "INCREMENT", square: squareIndex });
+        socket.emit("message", {
+          type: "INCREMENT",
+          square: squareIndex,
+          roomId,
+          amount,
+        });
       }
     },
-    [socket, connected]
+    [socket, connected, roomId]
   );
 
   return { socket, connected, player, board, sendIncrement };
