@@ -67,9 +67,13 @@ cd server && npm install
 cd ../client && npm install
 ```
 2️⃣ Run both client and server locally
-At the project root, run:
+1. At the project root, run:
 ```bash
 npm install
+```
+2. Then run:
+```bash
+npm start
 ```
 This will start:
 - 🖥️ Server on: http://localhost:3000
