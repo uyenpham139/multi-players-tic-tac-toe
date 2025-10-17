@@ -76,7 +76,7 @@ This will start:
 - 🌐 Client on: http://localhost:5173
 
 ---
-🎮 How to Play
+## 🎮 How to Play
 
 1. Open the client in your browser (http://localhost:5173).
 2. Click New game to start a new game, then choosing your role as Player or Spectator. If you are Player, you can Create new room or Join Room to enter an existing one. Or if you are a Spectator, you can only Join an existing room.
@@ -88,6 +88,6 @@ This will start:
 6. Use the Continue button to request a new game round. Or use Reset button to reset the whole game (including score and board)
 
 ---
-📝 License
+## 📝 License
 
 This project is licensed under the MIT License
