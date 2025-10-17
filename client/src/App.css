@@ -37,7 +37,7 @@ h2 {
 
 .text.avail {
   font-size: 1.25rem;
-  color: var(--white);
+  color: var(--primary-900);
 }
 
 .joinRoom {
@@ -50,7 +50,6 @@ h2 {
 
 .roomList {
   width: 100%;
-  background-color: var(--primary-700);
   padding: 10px 14px;
   margin: 24px 0;
   border-radius: 16px;
