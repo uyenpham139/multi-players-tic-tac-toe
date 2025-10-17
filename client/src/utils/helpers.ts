@@ -1,32 +1,79 @@
-type PlayerRole = "ODD" | "EVEN" | "SPECTATOR";
+// helpers.ts
+export type PlayerRole = "ODD" | "EVEN" | "SPECTATOR";
 
-interface PlayerAssignedMessage {
+export interface PlayerAssignedMessage {
   type: "PLAYER_ASSIGNED";
   player: PlayerRole;
   board: number[];
 }
 
-interface UpdateMessage {
+export interface UpdateMessage {
   type: "UPDATE";
   square: number;
-  amount: number; // ✅ changed from 'value' to 'amount'
+  amount: number;
 }
 
-interface GameOverMessage {
+export interface GameOverMessage {
   type: "GAME_OVER";
-  winner: PlayerRole;
+  winner: "ODD" | "EVEN";
   winningLine?: number[];
 }
 
+export interface ResetMessage {
+  type: "RESET";
+  board?: number[]; // optional, for syncing board state
+}
+
+export interface StatusMessage {
+  type: "STATUS";
+  message: string;
+}
+
+export interface WaitingMessage {
+  type: "WAITING";
+}
+
+export interface CanPlayMessage {
+  type: "CAN_PLAY";
+}
+
+export interface PlayerLeftMessage {
+  type: "PLAYER_LEFT";
+}
+
+export interface RequestResetMessage {
+  type: "REQUEST_RESET";
+  from: string;
+}
+
+export interface RequestCancelMessage {
+  type: "REQUEST_CANCEL";
+}
+
+export interface ContinueMessage {
+  type: "CONTINUE";
+  board?: number[];
+}
+
+// ─── Union ─────────────────────────────────────────────────
 export type ServerMessage =
   | PlayerAssignedMessage
   | UpdateMessage
-  | GameOverMessage;
+  | GameOverMessage
+  | ResetMessage
+  | StatusMessage
+  | WaitingMessage
+  | CanPlayMessage
+  | PlayerLeftMessage
+  | RequestResetMessage
+  | RequestCancelMessage
+  | ContinueMessage;
 
 export function handleServerMessage(
   msg: ServerMessage,
   setPlayer: (role: PlayerRole) => void,
-  setBoard: React.Dispatch<React.SetStateAction<number[]>>
+  setBoard: React.Dispatch<React.SetStateAction<number[]>>,
+  onExtraMessage?: (msg: ServerMessage) => void
 ) {
   switch (msg.type) {
     case "PLAYER_ASSIGNED":
@@ -35,19 +82,22 @@ export function handleServerMessage(
       break;
 
     case "UPDATE":
-      // Apply delta operation
-      setBoard((prevBoard) => {
-        const newBoard = [...prevBoard];
-        newBoard[msg.square] += msg.amount; // increment/decrement relative
+      setBoard((prev) => {
+        const newBoard = [...prev];
+        newBoard[msg.square] += msg.amount;
         return newBoard;
       });
       break;
 
-    case "GAME_OVER":
-      // alert(`Game Over! Winner: ${msg.winner}`);
+    // 🧹 NEW: reset and continue both clear the board
+    case "RESET":
+    case "CONTINUE":
+      setBoard(msg.board ?? Array(25).fill(0));
       break;
 
     default:
-      console.warn("Unknown message type:", msg);
+      // delegate GAME_OVER, STATUS, etc. to GameInfo
+      if (onExtraMessage) onExtraMessage(msg);
+      break;
   }
 }

@@ -9,7 +9,78 @@ h2 {
   margin: 0 0 12px 0;
 }
 
-.player-text {
+.text {
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.text.bold {
+  font-weight: 600;
+  margin: 0;
+}
+
+.text.player {
+  color: var(--second-yellow-100);
+  filter: drop-shadow(1.5px 0 0 var(--second-yellow-700))
+          drop-shadow(-1.5px 0 0 var(--second-yellow-700))
+          drop-shadow(1.5px 1.5px 0 var(--second-yellow-500))
+          drop-shadow(0px -1.5px 0 var(--second-yellow-500));
+}
+
+.text.spectator {
+  color: var(--second-pink-100);
+  filter: drop-shadow(1.5px 0 0 var(--second-pink-700))
+          drop-shadow(-1.5px 0 0 var(--second-pink-700))
+          drop-shadow(1.5px 1.5px 0 var(--second-pink-500))
+          drop-shadow(0px -1.5px 0 var(--second-pink-500));
+}
+
+.text.avail {
+  font-size: 1.25rem;
+  color: var(--white);
+}
+
+.joinRoom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.roomList {
+  width: 100%;
+  background-color: var(--primary-700);
+  padding: 10px 14px;
+  margin: 24px 0;
+  border-radius: 16px;
+}
+
+.roomItem {
+  background-color: var(--white);
+  padding: 6px;
+  border-radius: 16px;
+  font-size: 1.15rem;
+}
+
+.roomText {
+  margin: 12px;
+}
+
+.joinBtn {
+  padding: 0.75rem 2rem;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: var(--white);
+  background-color: var(--primary-600);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+/* .player-text {
   color: var(--second-blue-100);
   filter: drop-shadow(1.5px 0 0 var(--second-blue-700))
           drop-shadow(-1.5px 0 0 var(--second-blue-700))
@@ -31,7 +102,7 @@ h2 {
           drop-shadow(-1.5px 0 0 var(--second-yellow-700))
           drop-shadow(1.5px 1.5px 0 var(--second-yellow-500))
           drop-shadow(0px -1.5px 0 var(--second-yellow-500));
-}
+} */
 
 .container {
   place-items: center;
@@ -62,8 +133,7 @@ h2 {
   gap: 8px;
 }
 
-.homeBtn,
-.moreBtns {
+.homeBtn {
   border: none;
   display: flex;
   align-items: center;
@@ -78,105 +148,19 @@ h2 {
 }
 
 .homeBtn:hover,
-.moreBtns:hover {
+.joinBtn:hover {
   background-color: var(--primary-500);
 }
 
 .homeBtn:active,
-.moreBtns:active,
 .optionBtn:active {
   transform: translateY(3px);
   box-shadow: 0px 3px 0 var(--primary-700);
 }
 
-.homeBtn svg,
-.moreBtns svg {
+.homeBtn svg {
   width: 30px;
   height: 30px;
-}
-
-.dropdown {
-  position: relative;
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: 110%; /* below the button */
-  right: 0;
-  min-width: 180px;
-  background-color: var(--white);
-  border-radius: 16px;
-  padding: 8px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.dropdownMenu.active {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 26px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--primary-200);
-  transition: 0.3s;
-  border-radius: 34px;
-}
-
-/* The circle knob */
-.slider::before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  bottom: 3px;
-  background-color: var(--second-pink-100);
-  transition: 0.3s;
-  border-radius: 50%;
-}
-
-/* When toggled ON */
-.switch input:checked + .slider {
-  background-color: var(--primary-600);
-}
-
-/* Move the circle to the right */
-.switch input:checked + .slider::before {
-  transform: translateX(22px);
 }
 
 .errorText {
@@ -186,70 +170,18 @@ h2 {
   text-align: left;
 }
 
-.scoreboard {
-  width: 100%;
-  background-color: var(--primary-900);
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 4px;
-  margin-bottom: 16px;
-  padding: 6px;
-  border-radius: 16px;
-  box-sizing: border-box;
-}
-
-.scoretext {
-  font-size: 1.4rem;
-  font-weight: 500;
-  width: 80px;
-}
-
-.scoretext.player {
-  color: var(--second-blue-100);
-}
-
-.scoretext.ai {
-  color: var(--second-pink-100);
-}
-
-.scores {
-  width: 80px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--white);
-}
-
-.performanceBox {
-  padding: 8px 16px;
-  background-color: var(--white);
-  border-left: 10px solid var(--primary-500);
-  border-radius: 16px;
-  margin-bottom: 12px;
-}
-
-.performanceTitle {
-  margin: 0;
-  text-align: left;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--primary-900);
-}
-
-.performanceText {
-  margin: 0;
-  text-align: left;
-  color: var(--primary-600);
-}
-
+/* === Wrapper (container) === */
 .wrapper {
   width: 100%;
-  padding:  0 16px 16px 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 2rem;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -275,85 +207,42 @@ h2 {
   cursor: pointer;
 }
 
-.modeBtns.easy {
-  background-color: var(--second-yellow-100);
-  box-shadow: 0px 6px 0 var(--second-yellow-500);
-  color: var(--second-yellow-700);
-}
-
-.modeBtns.medium {
-  background-color: var(--second-blue-100);
-  box-shadow: 0px 6px 0 var(--second-blue-500);
-  color: var(--second-blue-700);
-}
-
-.modeBtns.hard {
-  background-color: var(--second-pink-100);
-  box-shadow: 0px 6px 0 var(--second-pink-500);
-  color: var(--second-pink-700);
-}
-
-.modeBtns.easy:hover {
-  border-color: var(--second-yellow-700);
-}
-
-.modeBtns.medium:hover {
-  border-color: var(--second-blue-700);
-}
-
-.modeBtns.hard:hover {
-  border-color: var(--second-pink-700);
-}
-
-.modeBtns.easy:active {
-  transform: translateY(3px);
-  box-shadow: 0px 3px 0 var(--second-yellow-700);
-}
-
-.modeBtns.medium:active {
-  transform: translateY(3px);
-  box-shadow: 0px 3px 0 var(--second-blue-700);
-}
-
-.modeBtns.hard:active {
-  transform: translateY(3px);
-  box-shadow: 0px 3px 0 var(--second-pink-700);
-}
-
 .optionBtn:hover {
   border-color: var(--second-purple);
 }
 
+/* === Board === */
 .board {
   background-color: var(--primary-900);
   width: 100%;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  padding: 18px 18px 24px 18px;
-  box-sizing: border-box;
+  gap: 12px;
+  padding: 16px;
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
 .boardRow {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
 .square {
-  height: 68px;
-  width: 74px;
+  height: 60px;
+  width: 60px;
   border: 2px solid transparent;
-  border-radius: 12px;
+  border-radius: 10px;
   background-color: var(--primary-600);
-  box-shadow: 0px 6px 0 var(--primary-700);
+  box-shadow: 0px 4px 0 var(--primary-700);
   font-family: var(--font-family);
   font-weight: 700;
-  font-size: 3rem;
+  font-size: 2.4rem;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .square:hover {
@@ -362,15 +251,15 @@ h2 {
 
 .square:active {
   transform: translateY(3px);
-  box-shadow: 0px 3px 0 var(--primary-700);
+  box-shadow: 0px 2px 0 var(--primary-700);
 }
 
-.square.x {
-  color: var(--second-blue-100); 
+.square.odd {
+  color: var(--second-blue-300); 
 }
 
-.square.o {
-  color: var(--second-pink-100); 
+.square.even {
+  color: var(--second-green-100); 
 }
 
 .optionBtns {
@@ -381,9 +270,216 @@ h2 {
   margin: 12px 0;
 }
 
+/* === Game Info Section === */
+.gameInfo {
+  width: 100%;
+  max-width: 600px;
+  background-color: var(--primary-200);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  margin: 1rem auto;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  transition: all 0.25s ease-in-out;
+}
+
+.highlight {
+  color: var(--second-pink-100);
+  filter: drop-shadow(1.5px 0 0 var(--second-pink-700))
+          drop-shadow(-1.5px 0 0 var(--second-pink-700))
+          drop-shadow(1.5px 1.5px 0 var(--second-pink-500))
+          drop-shadow(0px -1.5px 0 var(--second-pink-500));
+}
+
+/* === Roles === */
+.roleTag {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+  margin-left: 0.4rem;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+.roleTag.odd {
+  background-color: var(--second-blue-300);
+  box-shadow: 0 0 10px var(--second-blue-400);
+}
+
+.roleTag.even {
+  background-color: var(--second-green-100);
+  box-shadow: 0 0 10px var(--second-green-500);
+}
+
+.spectating {
+  color: #bbb;
+  font-style: italic;
+}
+
+/* === Scoreboard === */
+.scoreboard {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--primary-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border-radius: 1rem;
+  padding: 0.6rem 1.2rem;
+  margin: 1rem 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-sizing: border-box;
+}
+
+.scoretext {
+  font-size: 1.2rem;
+  font-weight: 600;
+  width: auto;
+  min-width: 60px;
+  text-align: center;
+}
+
+.scores {
+  min-width: 80px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.scoretext {
+  font-size: 1.4rem;
+  font-weight: 600;
+  width: 80px;
+}
+
+.scoretext.odd {
+  color: var(--second-blue-300);
+}
+
+.scoretext.even {
+  color: var(--second-green-100);
+}
+
+/* === Card === */
+.cardOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4); 
+  z-index: 1000; 
+}
+
+.card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 320px;
+  animation: popIn 0.3s ease;
+}
+
+.cardMessage {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.cardBtnGroup {
+  display: flex;
+  justify-content: space-around;
+}
+
+.cardBtn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.cardBtn:hover {
+  transform: scale(1.05);
+}
+
+.confirm {
+  background-color: var(--second-green-100);
+}
+
+.decline {
+  background-color: var(--error);
+  color: var(--white);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === Status Message === */
+.status {
+  margin: 0;
+  font-size: 1rem;
+  background: var(--primary-900);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: var(--white);
+  font-weight: 500;
+  animation: fadeIn 0.4s ease;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media screen and (min-width: 320px) {
   .title {
     margin-top: 72px;
+  }
+  .wrapper {
+    padding: 16px 0;
+  }
+
+  .gameInfo {
+    padding: 0
+  }
+
+  .square {
+    height: 50px;
+    width: 50px;
+    font-size: 2.3rem;
   }
 }
 
@@ -391,16 +487,50 @@ h2 {
   .title {
     margin-top: 60px;
   }
+
+  .square {
+    height: 50px;
+    width: 50px;
+    font-size: 2.3rem;
+  }
 }
 
 @media screen and (min-width: 1152px) {
   .title {
     margin-top: 42px;
   }
+
+  .gameInfo {
+    max-width: 700px;
+  }
+
+  .board {
+    max-width: 460px;
+  }
+
+  .square {
+    height: 68px;
+    width: 68px;
+    font-size: 2.6rem;
+  }
 }
 
 @media screen and (min-width: 1920px) {
   .title {
     margin-top: 42px;
+  }
+
+  .gameInfo {
+    max-width: 800px;
+  }
+
+  .board {
+    max-width: 500px;
+  }
+
+  .square {
+    height: 72px;
+    width: 72px;
+    font-size: 2.8rem;
   }
 }

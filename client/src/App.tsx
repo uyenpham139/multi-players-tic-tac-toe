@@ -41,8 +41,12 @@ function App() {
   }, [socket]);
 
   const handleHomeClick = () => {
+    if (roomId) {
+      socket.emit("leaveRoom", { roomId });
+    }
     setGameState("menu");
     setRole(null);
+    setRoomId("");
     setErrorMsg("");
   };
 
@@ -57,20 +61,48 @@ function App() {
   };
 
   const handleCreateRoom = () => {
-    if (role === "SPECTATOR") {
-      setErrorMsg("Spectators cannot create rooms");
-      return;
-    }
-    const newRoomId = `room-${Math.floor(Math.random() * 10000)}`;
-    socket?.emit("joinRoom", { roomId: newRoomId, role });
-    setRoomId(newRoomId);
-    setGameState("game");
+  if (role === "SPECTATOR") {
+    setErrorMsg("Spectators cannot create rooms");
+    return;
+  }
+
+  const newRoomId = `room-${Math.floor(Math.random() * 10000)}`;
+    socket.emit(
+      "joinRoom",
+      { roomId: newRoomId, role },
+      (response: { success: boolean; message?: string }) => {
+        console.log("🧩 createRoom response:", response);
+        if (response.success) {
+          setRoomId(newRoomId);
+          setGameState("game");
+          setErrorMsg("");
+        } else {
+          setErrorMsg(response.message || "❌ Failed to create room.");
+        }
+      }
+    );
   };
 
   const handleJoinRoom = (id: string) => {
-    socket?.emit("joinRoom", { roomId: id, role });
-    setRoomId(id);
-    setGameState("game");
+    if (!role) {
+      setErrorMsg("Please choose a role first.");
+      return;
+    }
+
+    socket.emit(
+      "joinRoom",
+      { roomId: id, role },
+      (response: { success: boolean; message?: string }) => {
+        console.log("🧩 joinRoom response:", response);
+        if (response.success) {
+          setRoomId(id);
+          setGameState("game");
+          setErrorMsg("");
+        } else {
+          setErrorMsg(response.message || "❌ Failed to join room.");
+        }
+      }
+    );
   };
 
   return (
@@ -106,7 +138,7 @@ function App() {
               <>
                 <div className="joinRoom">
                   <div>
-                    <p>Your ID: </p>
+                    <p className={`text ${role === "PLAYER" ? "player" : "spectator"}`}>Role: {role}</p>
                     {role === "PLAYER" ? 
                       <button className="modeBtns" onClick={() => handleCreateRoom()}>
                         Create new room
@@ -118,13 +150,13 @@ function App() {
                     {rooms.length > 0 ? (
                       rooms.map((room) => (
                         <div key={room.id} className="roomItem">
-                          <p>Room ID: {room.id}</p>
-                          <p>Players: {room.playerCount} / 2 | Spectators:{" "}{room.spectatorCount}/10</p>
-                          <button className="modeBtns" onClick={() => handleJoinRoom(room.id)}>Join</button>
+                          <p className="roomText">Room ID: {room.id}</p>
+                          <p className="roomText">Players: {room.playerCount} / 2 | Spectators:{" "}{room.spectatorCount} / 10</p>
+                          <button className="joinBtn" onClick={() => handleJoinRoom(room.id)}>Join</button>
                         </div>
                       ))
                     ) : (
-                      <p>No rooms available</p>
+                      <p className="text avail">No rooms available</p>
                     )}
                   </div>
                 </div>
