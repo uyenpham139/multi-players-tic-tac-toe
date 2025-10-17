@@ -3,6 +3,7 @@ import "./App.css";
 import GameInfo from "./components/GameInfo";
 import image from "./assets/hero-img.png";
 import { HomeOutlined } from "@mui/icons-material";
+import { useSocket } from "./hooks/useSocket";
 
 interface RoomInfo {
   id: string;
@@ -19,17 +20,25 @@ function App() {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [rooms, setRooms] = useState<RoomInfo[]>([]);
 
-  // ✅ Simulated fetch for room list (replace with real API or socket later)
+  const { socket, connected, player, board, sendIncrement } = useSocket(roomId);
+
   useEffect(() => {
-    if (gameState === "joinRoom") {
-      // For now, just mock some data
-      setRooms([
-        { id: "room1", playerCount: 2, spectatorCount: 4 },
-        { id: "room2", playerCount: 1, spectatorCount: 0 },
-        { id: "room3", playerCount: 2, spectatorCount: 10 },
-      ]);
-    }
-  }, [gameState]);
+    const handleRoomsUpdated = (updatedRooms: RoomInfo[]) => {
+      setRooms(updatedRooms);
+    };
+
+    const handleErrorMsg = (msg: string) => {
+      setErrorMsg(msg);
+    };
+
+    socket.on("roomsUpdated", handleRoomsUpdated);
+    socket.on("errorMsg", handleErrorMsg);
+
+    return () => {
+      socket.off("roomsUpdated", handleRoomsUpdated);
+      socket.off("errorMsg", handleErrorMsg);
+    };
+  }, [socket]);
 
   const handleHomeClick = () => {
     setGameState("menu");
@@ -49,28 +58,17 @@ function App() {
 
   const handleCreateRoom = () => {
     if (role === "SPECTATOR") {
-      setErrorMsg("Spectators cannot create new rooms.");
+      setErrorMsg("Spectators cannot create rooms");
       return;
     }
     const newRoomId = `room-${Math.floor(Math.random() * 10000)}`;
+    socket?.emit("joinRoom", { roomId: newRoomId, role });
     setRoomId(newRoomId);
     setGameState("game");
   };
 
   const handleJoinRoom = (id: string) => {
-    if (role === "SPECTATOR") {
-      const selectedRoom = rooms.find((r) => r.id === id);
-      if (selectedRoom && selectedRoom.spectatorCount >= 10) {
-        setErrorMsg("This room already has 10 spectators.");
-        return;
-      }
-    } else {
-      const selectedRoom = rooms.find((r) => r.id === id);
-      if (selectedRoom && selectedRoom.playerCount >= 2) {
-        setErrorMsg("This room is full. Please choose another.");
-        return;
-      }
-    }
+    socket?.emit("joinRoom", { roomId: id, role });
     setRoomId(id);
     setGameState("game");
   };
@@ -81,22 +79,16 @@ function App() {
         <div className='game'>
           <div className='appBtns'>
             <button onClick={handleHomeClick} className='homeBtn'><HomeOutlined /></button>
-            <div className='dropdown'>
-              {/* <button onClick={handleMoreClick} className='moreBtns'><MoreVertOutlined /></button>
-              <div className={`dropdownMenu ${isDropdownOpen ? "active" : ""}`}>
-                
-              </div> */}
-            </div>
           </div>
           <h1 className='title'>TIC TAC TOE</h1>
           <div className='wrapper'>
-            {gameState === "menu" ? (
-            ) : ""}
             {gameState === "menu" && (
               <>
                 <img src={image} alt="hero-img" />
                 <div className='buttons'>
-                  <button className='modeBtns' value="easy" onClick={handleNewGameClick}>New game</button>
+                  <button className='modeBtns' value="easy" onClick={handleNewGameClick}>
+                    New game
+                  </button>
                 </div>
               </>
             )}
@@ -104,27 +96,51 @@ function App() {
               <>
                 <img src={image} alt="hero-img" />
                 <h2>Choose role</h2>
-                <button className="modeBtns" onClick={() => handleChooseRole("PLAYER")}>Player</button>
-                <button className="modeBtns" onClick={() => handleChooseRole("SPECTATOR")}>Spectator</button>
+                <div className="buttons">
+                  <button className="modeBtns" onClick={() => handleChooseRole("PLAYER")}>Player</button>
+                  <button className="modeBtns" onClick={() => handleChooseRole("SPECTATOR")}>Spectator</button>
+                </div>
               </>
             )}
             {gameState === "joinRoom" && (
               <>
-                <div>
+                <div className="joinRoom">
                   <div>
-
+                    <p>Your ID: </p>
+                    {role === "PLAYER" ? 
+                      <button className="modeBtns" onClick={() => handleCreateRoom()}>
+                        Create new room
+                      </button> : ""}
+                    {errorMsg && <p className="error">{errorMsg}</p>}
                   </div>
-                  <div>
 
+                  <div className="roomList">
+                    {rooms.length > 0 ? (
+                      rooms.map((room) => (
+                        <div key={room.id} className="roomItem">
+                          <p>Room ID: {room.id}</p>
+                          <p>Players: {room.playerCount} / 2 | Spectators:{" "}{room.spectatorCount}/10</p>
+                          <button className="modeBtns" onClick={() => handleJoinRoom(room.id)}>Join</button>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No rooms available</p>
+                    )}
                   </div>
                 </div>
               </>
             ) }
-            {(
-              <>
-                <GameInfo roomId='1' />
-              </>
-            )}
+            {gameState === "game" && 
+              <GameInfo
+                roomId={roomId}
+                role={role}
+                socket={socket}
+                connected={connected}
+                player={player}
+                board={board}
+                sendIncrement={sendIncrement}
+              />
+            }
           </div>
         </div>
       </div>

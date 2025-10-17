@@ -15,97 +15,114 @@ interface ClientMessage {
 
 export function registerGameEvents(io: Server) {
   io.on("connection", (socket: Socket) => {
-    console.log(`User connected: ${socket.id}`);
+    console.log(`🟢 User connected: ${socket.id}`);
 
-    // Client asks for room list
+    /*
+      Client asks for room list
+    */
     socket.on("get_rooms", () => {
-      socket.emit("room_list", getActiveRooms());
+      socket.emit("roomsUpdated", getActiveRooms());
     });
 
-    // Join a room
+    /*
+      Player or spectator joins a room
+    */
     socket.on(
-      "join_room",
+      "joinRoom",
       ({
         roomId,
-        roleChoice,
+        role,
       }: {
         roomId: string;
-        roleChoice: "PLAYER" | "SPECTATOR";
+        role: "PLAYER" | "SPECTATOR";
       }) => {
-        const isPlayer = roleChoice === "PLAYER";
-        const room = getOrCreateRoom(roomId, isPlayer);
+        const isPlayer = role === "PLAYER";
 
+        const room = getOrCreateRoom(roomId, isPlayer, io);
         if (!room) {
           socket.emit("message", {
             type: "ERROR",
-            message: "Cannot join or create room.",
+            message: "❌ Cannot join or create this room.",
           });
           return;
         }
 
-        const player = addPlayerToRoom(room, socket.id, roleChoice);
+        if (room.players.some(p => p.id === socket.id)) return;
+
+        const player = addPlayerToRoom(room, socket.id, role, io);
         if (!player) {
           socket.emit("message", {
             type: "ERROR",
-            message: "Room full or spectator limit reached.",
+            message: "❌ Room is full or spectator limit reached.",
           });
           return;
         }
 
         socket.join(roomId);
 
-        // Send back role and board
+        // Send back role & initial board
         socket.emit("message", {
           type: "PLAYER_ASSIGNED",
           player: player.role,
           board: room.board,
         });
 
-        // Notify everyone else
+        // Notify all members of the room
         io.to(roomId).emit("message", {
           type: "STATUS",
           message: `${player.role} joined room ${roomId}`,
         });
 
-        io.emit("room_list", getActiveRooms());
+        // Broadcast updated room list to all clients
+        io.emit("roomsUpdated", getActiveRooms());
+
+        console.log(
+          `👤 ${player.role} (${socket.id}) joined ${roomId}. Players: ${room.players.length}`
+        );
       }
     );
 
-    // Handle gameplay operations
+    /*
+      Handle gameplay events (INCREMENT, etc.)
+    */
     socket.on("message", (data: ClientMessage) => {
       const { type, square, roomId, amount = 1 } = data;
-      const room = getOrCreateRoom(roomId, false);
+      const room = getOrCreateRoom(roomId, false, io);
       if (!room) return;
 
       switch (type) {
         case "INCREMENT": {
-          // Apply operation on the server
           const prevValue = room.board[square] ?? 0;
           room.board[square] = prevValue + amount;
 
           console.log(
-            `Square[${square}] incremented by ${amount}: ${prevValue} → ${room.board[square]}`
+            `⚙️ Room ${roomId}: Square[${square}] += ${amount} → ${room.board[square]}`
           );
 
-          // Broadcast the *operation*, not the new value
+          // Broadcast delta (amount) to all players in the same room
           io.to(roomId).emit("message", {
             type: "UPDATE",
             square,
-            amount, 
+            amount,
           });
           break;
         }
 
         default:
-          console.warn(`Unknown message type from ${socket.id}:`, type);
+          console.warn(`⚠️ Unknown message type from ${socket.id}: ${type}`);
           break;
       }
     });
 
+    /*
+      When a user disconnects
+    */
     socket.on("disconnect", () => {
-      removePlayer(socket.id);
-      console.log(`User disconnected: ${socket.id}`);
-      io.emit("room_list", getActiveRooms());
+      removePlayer(socket.id, io);
+      console.log(`🔴 User disconnected: ${socket.id}`);
+
+      // Update room list for everyone
+      io.emit("roomsUpdated", getActiveRooms());
     });
   });
 }
